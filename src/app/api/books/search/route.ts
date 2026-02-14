@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import type { Request } from "next/server";
-import { Next } from "react-bootstrap/esm/PageItem";
 
 export async function GET(req: Request) {
   try {
