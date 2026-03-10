@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { render } from "@testing-library/react";
 import axios from "axios";
 import { useAuthGuard } from "@/hooks/useAuthGuard";

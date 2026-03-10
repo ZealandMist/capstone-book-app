@@ -67,3 +67,26 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## External API
+
+Project is currently using Google Books API
+It's main purpuse to search for books, retrieve book metadata, and display book information.
+This allows for a large searchable catalog witout needing to maintain it's own database of book data.
+
+## Internal API
+The internal API endpoints allow the frontend to communicate with the server and do basic CRUD process and authentication.
+These APIs are implemented in the Next.js /api routes and are called using Axios from the frontend.
+
+Example endpoints include the following: 
+1. Get User Reading Lists - Retrieves all reading lists that belong to the currently authenticated user. - GET /api/reading-lists/user
+2. Add Book to Reading List - Add Book to Reading List - POST /api/reading-lists/add-book
+3. Create Reading List - Creates a new reading list for the logged-in user. - POST /api/reading-lists/create
+4. Book Search API - Searches for books using the external Google Books API and returns formatted results to the frontend. - GET /api/books/search?q=<searchTerm>
+5. 

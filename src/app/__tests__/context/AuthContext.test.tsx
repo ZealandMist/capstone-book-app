@@ -1,32 +1,41 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
-import axios from 'axios';
-import { AuthProvider, useAuth } from '@/context/AuthContext';
-import '@testing-library/jest-dom';
+/**
+ * @jest-environment jsdom
+ */
 
-jest.mock('axios');
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import axios from "axios";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import "@testing-library/jest-dom";
 
-const mockedAxios = axios as jest.Mocked<typeof axios>
+jest.mock("axios");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 function TestComponent() {
   const { user, logout } = useAuth();
 
-  return(
+  return (
     <>
-    <div data-testid="username">{user?.username ?? "no-user"}</div>
-    <button onClick={logout}>Logout</button>
+      <div data-testid="username">
+        {user?.username ?? "no-user"}
+      </div>
+      <button onClick={logout}>Logout</button>
     </>
   );
 }
 
-describe('AuthContext', () => {
+describe("AuthContext", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('fetches and sets user on mount', async () => {
+  it("fetches and sets user on mount", async () => {
     mockedAxios.get.mockResolvedValueOnce({
-      data: { _id: "1", username: "Test User", email: "testuser@example.com" },
+      data: {
+        _id: "1",
+        username: "Test User",
+        email: "testuser@example.com",
+      },
     });
 
     render(
@@ -35,13 +44,17 @@ describe('AuthContext', () => {
       </AuthProvider>
     );
 
-    await waitFor(() =>
-      expect(screen.getByTestId("username")).toHaveTextContent("Test User")
-    );
+    // findBy* automatically waits
+    const username = await screen.findByTestId("username");
+
+    expect(username).toHaveTextContent("Test User");
+    expect(mockedAxios.get).toHaveBeenCalledTimes(1);
   });
-  
-  it('sets user to null if profile request fails', async () => {
-    mockedAxios.get.mockRejectedValueOnce(new Error("Unauthorized"));
+
+  it("sets user to null if profile request fails", async () => {
+    mockedAxios.get.mockRejectedValueOnce(
+      new Error("Unauthorized")
+    );
 
     render(
       <AuthProvider>
@@ -49,14 +62,19 @@ describe('AuthContext', () => {
       </AuthProvider>
     );
 
-    await waitFor(() =>
-      expect(screen.getByTestId("username")).toHaveTextContent("no-user")
-    );
+    const username = await screen.findByTestId("username");
+
+    expect(username).toHaveTextContent("no-user");
+    expect(mockedAxios.get).toHaveBeenCalledTimes(1);
   });
 
-  it('logs out and clears user', async () => {
-     mockedAxios.get.mockResolvedValueOnce({
-      data: { _id: "1", username: "Test User", email: "testuser@example.com" },
+  it("logs out and clears user", async () => {
+    mockedAxios.get.mockResolvedValueOnce({
+      data: {
+        _id: "1",
+        username: "Test User",
+        email: "testuser@example.com",
+      },
     });
 
     mockedAxios.post.mockResolvedValueOnce({});
@@ -69,14 +87,18 @@ describe('AuthContext', () => {
       </AuthProvider>
     );
 
-    await waitFor(() =>
-      expect(screen.getByTestId("username")).toHaveTextContent("Test User")
-    );
+    // Wait for user to load
+    expect(
+      await screen.findByText("Test User")
+    ).toBeInTheDocument();
 
-    await user.click(screen.getByText('Logout'));
+    await user.click(screen.getByText("Logout"));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('username')).toHaveTextContent('no-user');
-    });
+    expect(mockedAxios.post).toHaveBeenCalledTimes(1);
+
+    // After logout
+    expect(
+      await screen.findByText("no-user")
+    ).toBeInTheDocument();
   });
 });
