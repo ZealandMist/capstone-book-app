@@ -8,6 +8,8 @@ import type {Config} from 'jest';
 const config: Config = {
   testEnvironment: "jsdom",
 
+  // Run early setup (mocks and shims) before loading modules
+  setupFiles: ["<rootDir>/jest.setup.ts"],
   setupFilesAfterEnv: ["@testing-library/jest-dom"],
 
   transform: {
