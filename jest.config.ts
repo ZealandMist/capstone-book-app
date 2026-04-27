@@ -8,9 +8,8 @@ import type {Config} from 'jest';
 const config: Config = {
   testEnvironment: "jsdom",
 
-  // Ensure a minimal global Request exists when importing next/server in tests
-  setupFiles: ["<rootDir>/jest.setupRequest.js"],
-
+  // Run early setup (mocks and shims) before loading modules
+  setupFiles: ["<rootDir>/jest.setup.ts"],
   setupFilesAfterEnv: ["@testing-library/jest-dom"],
 
   transform: {
@@ -29,6 +28,8 @@ const config: Config = {
 
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
+    "\\.(css|scss|sass)$": "<rootDir>/__mocks__/styleMock.ts",
   },
 
   // All imported modules in your tests should be mocked automatically

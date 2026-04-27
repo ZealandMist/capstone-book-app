@@ -11,13 +11,12 @@ describe("GET api/books/search", () => {
 
   it("returns empty items when q is missing", async () => {
     // Minimal mock of the Request object
-    const req = {
-      url: "http://localhost/api/books/search", 
-    } as unknown as Request;
+    const req = new Request("http://localhost/api/books/search");
 
     const res = await GET(req);
     const data = await res.json();
 
+    expect(res.status).toBe(200);
     expect(data).toEqual({ items: [] });
     expect(mockedAxios.get).not.toHaveBeenCalled();
   });
@@ -33,6 +32,8 @@ describe("GET api/books/search", () => {
     const res = await GET(req);
     const data = await res.json();
     
+    expect(res.status).toBe(200);
+    expect(mockedAxios.get).toHaveBeenCalledTimes(1);
     expect(data.items).toHaveLength(1);
     expect(data.items[0].volumeInfo.title).toBe("Test Book");
   });
@@ -46,6 +47,7 @@ describe("GET api/books/search", () => {
     const data = await res.json();
 
     expect(res.status).toBe(500);
+    expect(mockedAxios.get).toHaveBeenCalledTimes(1);
     expect(data).toEqual({ message: "Server error" });
   })
 });

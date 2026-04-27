@@ -1,8 +1,39 @@
+# TBR List Application
+
+A full stack Next.js application. The application allows user to create mulitple TBR lists by searching the Google Books API. User must be authenticated. 
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Features
+- User authentication
+- Protected dashboard routes
+- Create and manage reading lists
+- Search and filter reading lists
+- Server and Client components using the App Router 
+- API routes for user and list data
+
+
+## Tech Stack 
+- Next.js 
+- Typescript
+- Bootstrap
+- Cookie based authentication
+- Jest
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies
+
+npm install
+
+2. Create .env file 
+
+MONGO_URI=your_mongo_connection_string
+JWT_SECRET=your_jwt_token
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+GOOGLE_BOOKS_API_KEY=your_google_books_api_key
+
+3. First, run the development server:
 
 ```bash
 npm run dev
@@ -12,6 +43,14 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+
+4. Other server commands
+
+```bash
+npm run build  # build for production server
+npm run start # start production server
+npm test # to run test suite
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -34,3 +73,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## External API
+
+Project is currently using Google Books API
+It's main purpuse to search for books, retrieve book metadata, and display book information.
+This allows for a large searchable catalog witout needing to maintain it's own database of book data.
+
+## Internal API
+The internal API endpoints allow the frontend to communicate with the server and do basic CRUD process and authentication.
+These APIs are implemented in the Next.js /api routes and are called using Axios from the frontend.
+
+Example endpoints include the following: 
+1. Get User Reading Lists - Retrieves all reading lists that belong to the currently authenticated user. - GET /api/reading-lists/user
+2. Add Book to Reading List - Add Book to Reading List - POST /api/reading-lists/add-book
+3. Create Reading List - Creates a new reading list for the logged-in user. - POST /api/reading-lists/create
+4. Book Search API - Searches for books using the external Google Books API and returns formatted results to the frontend. - GET /api/books/search?q=<searchTerm>
+5. 

@@ -16,7 +16,7 @@ import {
   FormControl,
   CardImg
 } from "react-bootstrap";
-import '@/app/(protected)/dashboard/page.css';
+import "@/app/(protected)/dashboard/page.css";
 import { useRouter } from "next/navigation";
 
 interface ReadingList {
@@ -71,7 +71,7 @@ export default function DashboardPage() {
     fetchLists();
   }, [loading, isAuth]);
 
-  if (!useAuth) {
+  if (!loading) {
     return null;
   }
 
